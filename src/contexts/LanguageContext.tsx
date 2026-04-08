@@ -60,6 +60,9 @@ export const translations: Translations = {
   stats_puja: { hi: 'संपन्न पूजाएं', en: 'Pujas Completed', sa: 'संपन्नाः पूजाः', gu: 'સંપન્ન પૂજાઓ' },
   stats_pandit: { hi: 'अनुभवी पंडित', en: 'Expert Pandits', sa: 'अनुभवाः पण्डिताः', gu: 'અનુભવી પંડિતો' },
   stats_ashram: { hi: 'सेवा केंद्र', en: 'Service Centers', sa: 'सेवाकेन्द्राणि', gu: 'સેવા કેન્દ્રો' },
+  akhada_website: { hi: 'अखाड़ा वेबसाइट', en: 'Akhada Website', sa: 'अखाडा जालस्थानम्', gu: 'અખાડા વેબસાઇટ' },
+  detailed_panchang: { hi: 'विस्तृत पंचांग', en: 'Detailed Panchang', sa: 'विस्तृतं पञ्चाङ्गम्', gu: 'વિગતવાર પંચાંગ' },
+  whatsapp_us: { hi: 'व्हाट्सएप करें', en: 'WhatsApp Us', sa: 'व्हाट्सएप सन्देशः', gu: 'વોટ્સએપ કરો' },
 };
 
 interface LanguageContextType {

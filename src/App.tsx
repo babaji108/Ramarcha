@@ -20,7 +20,9 @@ import {
   MapPin,
   Video,
   Sun,
-  Moon
+  Moon,
+  Globe,
+  MessageCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Toaster, toast } from 'sonner';
@@ -39,40 +41,6 @@ import ProfilePage from './components/ProfilePage';
 import NotificationBell from './components/NotificationBell';
 import BookingHistory from './components/BookingHistory';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-
-class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { hasError: boolean }> {
-  constructor(props: { children: React.ReactNode }) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
-
-  componentDidCatch(error: any, errorInfo: any) {
-    console.error("ErrorBoundary caught an error", error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen bg-[#FFF5E6] flex flex-col items-center justify-center p-4 text-center">
-          <h1 className="text-2xl font-bold text-[#4A2C2A] mb-4">कुछ गलत हो गया</h1>
-          <p className="text-gray-600 mb-6">कृपया पेज को रिफ्रेश करें।</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="bg-[#FF9933] text-white px-6 py-2 rounded-full font-bold"
-          >
-            रिफ्रेश करें
-          </button>
-        </div>
-      );
-    }
-
-    return this.props.children;
-  }
-}
 
 function AppContent() {
   const { t, language, setLanguage } = useLanguage();
@@ -154,6 +122,15 @@ function AppContent() {
                 <Link to="/" className="hover:text-[#FFD700] transition-colors">{t('home')}</Link>
                 <Link to="/panchang" className="hover:text-[#FFD700] transition-colors">{t('panchang')}</Link>
                 <Link to="/gallery" className="hover:text-[#FFD700] transition-colors">{t('gallery')}</Link>
+                <a 
+                  href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center space-x-1 hover:text-[#FFD700] transition-colors"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>{t('akhada_website')}</span>
+                </a>
                 
                 {/* Language Switcher */}
                 <div className="relative group">
@@ -217,6 +194,15 @@ function AppContent() {
                   <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('home')}</Link>
                   <Link to="/panchang" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('panchang')}</Link>
                   <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('gallery')}</Link>
+                  <a 
+                    href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block py-2 hover:bg-[#FF9933] rounded px-2"
+                  >
+                    {t('akhada_website')}
+                  </a>
                   
                   {/* Mobile Language Switcher */}
                   <div className="py-2 border-t border-white/20 mt-2">
@@ -281,11 +267,26 @@ function AppContent() {
             <div className="flex justify-center space-x-6 mb-8">
               <Link to="/about" className="hover:underline">हमारे बारे में</Link>
               <Link to="/contact" className="hover:underline">संपर्क करें</Link>
-              <Link to="/terms" className="hover:underline">नियम और शर्तें</Link>
+              <a href="https://wa.me/917909641191" target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center space-x-1">
+                <MessageCircle className="w-4 h-4" />
+                <span>{t('whatsapp_us')}</span>
+              </a>
             </div>
             <p className="text-sm opacity-60">© 2026 रामर्चा - अखाड़ा परिषद। सर्वाधिकार सुरक्षित।</p>
           </div>
         </footer>
+
+        {/* Floating WhatsApp Button */}
+        <motion.a
+          href="https://wa.me/917909641191"
+          target="_blank"
+          rel="noopener noreferrer"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
+          className="fixed bottom-24 right-8 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-2xl flex items-center justify-center"
+        >
+          <MessageCircle className="w-6 h-6 fill-current" />
+        </motion.a>
       </div>
     </Router>
   );
@@ -293,10 +294,8 @@ function AppContent() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <LanguageProvider>
-        <AppContent />
-      </LanguageProvider>
-    </ErrorBoundary>
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }

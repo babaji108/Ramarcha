@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle } from 'lucide-react';
+import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import DonationSection from './DonationSection';
 import FloatingDonationButton from './FloatingDonationButton';
@@ -79,6 +79,15 @@ export default function LandingPage() {
             >
               {t('daily_darshan')}
             </Link>
+            <a 
+              href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-12 py-5 rounded-full text-xl font-bold hover:bg-white/20 transition-all flex items-center space-x-2"
+            >
+              <Globe className="w-5 h-5" />
+              <span>{t('akhada_website')}</span>
+            </a>
           </motion.div>
         </div>
       </section>
@@ -128,64 +137,38 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Quick Panchang & Events */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <section className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-[#FFD700]">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold flex items-center space-x-2 dark:text-white">
-              <Sun className="text-[#FF9933]" />
-              <span>आज का पंचांग</span>
-            </h2>
-            <Link to="/panchang" className="text-[#FF9933] font-bold hover:underline">पूरा देखें</Link>
-          </div>
-          <div className="space-y-4">
-            <div className="flex justify-between p-4 bg-[#FFF5E6] dark:bg-gray-700 rounded-xl">
-              <span className="font-medium dark:text-gray-300">तिथि</span>
-              <span className="dark:text-white">एकादशी</span>
+      {/* Upcoming Events */}
+      <section className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-[#FFD700]">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-bold flex items-center space-x-2 dark:text-white">
+            <Calendar className="text-[#FF9933]" />
+            <span>आगामी कार्यक्रम</span>
+          </h2>
+          <Link to="/gallery" className="text-[#FF9933] font-bold hover:underline">सभी देखें</Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex items-center space-x-4 p-4 hover:bg-[#FFF5E6] dark:hover:bg-gray-700 rounded-xl transition-colors cursor-pointer">
+            <div className="bg-[#FF9933] text-white p-3 rounded-lg text-center min-w-[60px]">
+              <div className="text-xs">APR</div>
+              <div className="text-xl font-bold">15</div>
             </div>
-            <div className="flex justify-between p-4 bg-[#FFF5E6] dark:bg-gray-700 rounded-xl">
-              <span className="font-medium dark:text-gray-300">नक्षत्र</span>
-              <span className="dark:text-white">रोहिणी</span>
-            </div>
-            <div className="flex justify-between p-4 bg-[#FFF5E6] dark:bg-gray-700 rounded-xl">
-              <span className="font-medium dark:text-gray-300">योग</span>
-              <span className="dark:text-white">सौभाग्य</span>
+            <div>
+              <h3 className="font-bold dark:text-white">हनुमान जयंती महोत्सव</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">सुबह 8:00 बजे से</p>
             </div>
           </div>
-        </section>
-
-        <section className="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-[#FFD700]">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold flex items-center space-x-2 dark:text-white">
-              <Calendar className="text-[#FF9933]" />
-              <span>आगामी कार्यक्रम</span>
-            </h2>
-            <Link to="/gallery" className="text-[#FF9933] font-bold hover:underline">सभी देखें</Link>
-          </div>
-          <div className="space-y-4">
-            <div className="flex items-center space-x-4 p-4 hover:bg-[#FFF5E6] dark:hover:bg-gray-700 rounded-xl transition-colors cursor-pointer">
-              <div className="bg-[#FF9933] text-white p-3 rounded-lg text-center min-w-[60px]">
-                <div className="text-xs">APR</div>
-                <div className="text-xl font-bold">15</div>
-              </div>
-              <div>
-                <h3 className="font-bold dark:text-white">हनुमान जयंती महोत्सव</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">सुबह 8:00 बजे से</p>
-              </div>
+          <div className="flex items-center space-x-4 p-4 hover:bg-[#FFF5E6] dark:hover:bg-gray-700 rounded-xl transition-colors cursor-pointer">
+            <div className="bg-[#FF9933] text-white p-3 rounded-lg text-center min-w-[60px]">
+              <div className="text-xs">APR</div>
+              <div className="text-xl font-bold">22</div>
             </div>
-            <div className="flex items-center space-x-4 p-4 hover:bg-[#FFF5E6] dark:hover:bg-gray-700 rounded-xl transition-colors cursor-pointer">
-              <div className="bg-[#FF9933] text-white p-3 rounded-lg text-center min-w-[60px]">
-                <div className="text-xs">APR</div>
-                <div className="text-xl font-bold">22</div>
-              </div>
-              <div>
-                <h3 className="font-bold dark:text-white">सामूहिक सुंदरकांड पाठ</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400">शाम 6:00 बजे से</p>
-              </div>
+            <div>
+              <h3 className="font-bold dark:text-white">सामूहिक सुंदरकांड पाठ</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">शाम 6:00 बजे से</p>
             </div>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
 
       {/* Donation Section */}
       <div id="donation-section">
