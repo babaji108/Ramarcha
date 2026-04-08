@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    // Collection: users
+    // Fields: uid, name, email, phone, role, address, createdAt
+    //
+    // Collection: pandits
+    // Fields: uid, specialization, experience, bio, isVerified, rating
+    //
+    // Collection: pujas
+    // Fields: id, name, description, price, category
+    //
+    // Collection: bookings
+    // Fields: id, bhaktId, panditId, pujaId, date, status, paymentStatus, videoLink, address, vehiclePrepayment, createdAt
+    //
+    // Collection: events
+    // Fields: id, title, description, date, imageUrl
+    // ===============================================================
+
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+
+    function isSuperAdmin() {
+      return hasRole('super_admin') || (request.auth.token.email == "sriswamiji108@gmail.com" && request.auth.token.email_verified == true);
+    }
+
+    function isAdmin() {
+      return isSuperAdmin() || hasRole('admin');
+    }
+
+    // Validation Functions
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'name', 'role']) &&
+             data.role in ['super_admin', 'admin', 'pandit', 'bhakt'] &&
+             data.name is string && data.name.size() > 0 && data.name.size() < 100;
+    }
+
+    // Rules
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(userId) && isValidUser(request.resource.data) && request.resource.data.role == 'bhakt';
+      allow update: if isSuperAdmin() || (isOwner(userId) && request.resource.data.role == resource.data.role);
+      allow delete: if isSuperAdmin();
+    }
+
+    match /pandits/{userId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /pujas/{pujaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated() && (isOwner(resource.data.bhaktId) || isOwner(resource.data.panditId) || isAdmin());
+      allow create: if isAuthenticated() && isOwner(request.resource.data.bhaktId);
+      allow update: if isAuthenticated() && (isOwner(resource.data.bhaktId) || isOwner(resource.data.panditId) || isAdmin());
+    }
+
+    match /events/{eventId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated() && (isOwner(resource.data.bhaktId) || isAdmin());
+      allow create: if isAuthenticated();
+    }
+  }
+}

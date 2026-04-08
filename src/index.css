@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@layer base {
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+  
+  .dark .bg-white {
+    @apply bg-gray-800 text-gray-100 border-gray-700;
+  }
+  
+  .dark .text-gray-600 {
+    @apply text-gray-400;
+  }
+  
+  .dark .text-gray-500 {
+    @apply text-gray-400;
+  }
+  
+  .dark .bg-gray-50 {
+    @apply bg-gray-700;
+  }
+  
+  .dark .border-gray-100 {
+    @apply border-gray-700;
+  }
+
+  .dark .text-[#4A2C2A] {
+    @apply text-orange-100;
+  }
+
+  .dark .bg-[#FFF5E6] {
+    @apply bg-gray-700 text-orange-100;
+  }
+}
