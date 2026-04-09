@@ -94,3 +94,16 @@ export interface AuditLog {
   newRole: UserRole;
   timestamp: string;
 }
+
+export interface Membership {
+  id: string;
+  userId: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  occupation: string;
+  membershipType: 'annual' | 'life' | 'patron';
+  status: 'pending' | 'approved' | 'rejected';
+  createdAt: string;
+}

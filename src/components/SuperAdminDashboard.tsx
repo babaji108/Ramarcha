@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import AdminDashboard from './AdminDashboard';
 import { motion, AnimatePresence } from 'motion/react';
-import { Settings, Image as ImageIcon, Bell, ShieldAlert, Database, X, Send, Plus, Trash2, Edit2, ExternalLink, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Settings, Image as ImageIcon, Bell, ShieldAlert, Database, X, Send, Plus, Trash2, Edit2, ExternalLink, ToggleLeft, ToggleRight, Globe, Users, ChevronRight } from 'lucide-react';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import { sendNotification } from './NotificationBell';
@@ -117,6 +117,23 @@ export default function SuperAdminDashboard() {
 
   return (
     <div className="space-y-12">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { label: 'सर्वर स्थिति', value: 'सक्रिय', color: 'text-green-500', icon: <Globe className="w-5 h-5" /> },
+          { label: 'डेटाबेस लोड', value: 'कम', color: 'text-blue-500', icon: <Database className="w-5 h-5" /> },
+          { label: 'सक्रिय उपयोगकर्ता', value: '1,240', color: 'text-purple-500', icon: <Users className="w-5 h-5" /> },
+          { label: 'सुरक्षा स्थिति', value: 'सुरक्षित', color: 'text-green-600', icon: <ShieldAlert className="w-5 h-5" /> },
+        ].map((stat, i) => (
+          <div key={i} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">{stat.label}</span>
+              <div className={stat.color}>{stat.icon}</div>
+            </div>
+            <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+          </div>
+        ))}
+      </div>
+
       <div className="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 p-4 rounded-r-xl flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <ShieldAlert className="text-red-500" />
@@ -457,7 +474,3 @@ export default function SuperAdminDashboard() {
     </div>
   );
 }
-
-const ChevronRight = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle, Globe } from 'lucide-react';
+import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle, Globe, Award } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import DonationSection from './DonationSection';
 import FloatingDonationButton from './FloatingDonationButton';
@@ -78,6 +78,13 @@ export default function LandingPage() {
               className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-12 py-5 rounded-full text-xl font-bold hover:bg-white/20 transition-all"
             >
               {t('daily_darshan')}
+            </Link>
+            <Link 
+              to="/membership" 
+              className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-12 py-5 rounded-full text-xl font-bold hover:bg-white/20 transition-all flex items-center space-x-2"
+            >
+              <Award className="w-5 h-5" />
+              <span>{t('become_member')}</span>
             </Link>
             <a 
               href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 

@@ -1,27 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, onSnapshot, orderBy } from 'firebase/firestore';
 import { auth, db } from '../firebase';
-import { Booking, Puja } from '../types';
+import { Booking, Membership } from '../types';
 import { motion } from 'motion/react';
-import { Calendar, Clock, CreditCard, Video, MapPin, Plus, ChevronRight, Car, CheckCircle } from 'lucide-react';
+import { Calendar, Clock, CreditCard, Video, MapPin, Plus, ChevronRight, Car, CheckCircle, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { hi } from 'date-fns/locale';
 
 export default function BhaktDashboard() {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [membership, setMembership] = useState<Membership | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!auth.currentUser) return;
 
+    // Fetch bookings
     const q = query(
       collection(db, 'bookings'),
       where('bhaktId', '==', auth.currentUser.uid),
       orderBy('createdAt', 'desc')
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
+    const unsubscribeBookings = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Booking));
       setBookings(data);
       setLoading(false);
@@ -30,7 +32,22 @@ export default function BhaktDashboard() {
       setLoading(false);
     });
 
-    return () => unsubscribe();
+    // Fetch membership
+    const mq = query(
+      collection(db, 'memberships'),
+      where('userId', '==', auth.currentUser.uid)
+    );
+
+    const unsubscribeMembership = onSnapshot(mq, (snapshot) => {
+      if (!snapshot.empty) {
+        setMembership({ id: snapshot.docs[0].id, ...snapshot.docs[0].data() } as Membership);
+      }
+    });
+
+    return () => {
+      unsubscribeBookings();
+      unsubscribeMembership();
+    };
   }, []);
 
   const getStatusColor = (status: string) => {
@@ -106,6 +123,45 @@ export default function BhaktDashboard() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Membership Status Card */}
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold dark:text-white">सेवा समिति सदस्यता</h3>
+              <Award className="w-5 h-5 text-[#FF9933]" />
+            </div>
+            {membership ? (
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">प्रकार:</span>
+                  <span className="text-sm font-bold dark:text-white uppercase">{membership.membershipType}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">स्थिति:</span>
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${
+                    membership.status === 'approved' ? 'bg-green-100 text-green-700' :
+                    membership.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                    'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {membership.status === 'approved' ? 'सक्रिय' : 
+                     membership.status === 'rejected' ? 'अस्वीकृत' : 'लंबित'}
+                  </span>
+                </div>
+                {membership.status === 'approved' && (
+                  <div className="pt-2">
+                    <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-xl border border-green-100 dark:border-green-900/30">
+                      <p className="text-[10px] text-green-700 dark:text-green-400 font-medium">आप आश्रम सेवा संगठन के सम्मानित सदस्य हैं।</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="text-center py-4">
+                <p className="text-sm text-gray-500 mb-4">आप अभी तक सदस्य नहीं हैं।</p>
+                <Link to="/membership" className="text-[#FF9933] text-sm font-bold hover:underline">सदस्य बनें</Link>
+              </div>
+            )}
           </div>
 
           <div className="bg-[#4A2C2A] text-white p-6 rounded-2xl shadow-lg relative overflow-hidden">

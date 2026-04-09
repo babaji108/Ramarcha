@@ -35,6 +35,8 @@ import PanditDashboard from './components/PanditDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import SuperAdminDashboard from './components/SuperAdminDashboard';
 import PujaBooking from './components/PujaBooking';
+import PujaDetail from './components/PujaDetail';
+import MembershipForm from './components/MembershipForm';
 import EventGallery from './components/EventGallery';
 import Panchang from './components/Panchang';
 import ProfilePage from './components/ProfilePage';
@@ -121,6 +123,7 @@ function AppContent() {
               <div className="hidden md:flex items-center space-x-8">
                 <Link to="/" className="hover:text-[#FFD700] transition-colors">{t('home')}</Link>
                 <Link to="/panchang" className="hover:text-[#FFD700] transition-colors">{t('panchang')}</Link>
+                <Link to="/membership" className="hover:text-[#FFD700] transition-colors">{t('membership')}</Link>
                 <Link to="/gallery" className="hover:text-[#FFD700] transition-colors">{t('gallery')}</Link>
                 <a 
                   href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
@@ -157,15 +160,27 @@ function AppContent() {
 
                 {profile ? (
                   <>
-                    <Link to="/dashboard" className="hover:text-[#FFD700] transition-colors">{t('dashboard')}</Link>
-                    <Link to="/profile" className="hover:text-[#FFD700] transition-colors flex items-center space-x-1">
-                      <UserIcon className="w-4 h-4" />
-                      <span>{t('profile')}</span>
-                    </Link>
-                    <button onClick={handleLogout} className="flex items-center space-x-1 bg-[#4A2C2A] px-4 py-2 rounded-lg hover:bg-[#2D1B1A] transition-colors">
-                      <LogOut className="w-4 h-4" />
-                      <span>{t('logout')}</span>
-                    </button>
+                    <div className="flex items-center space-x-4">
+                      <Link to="/dashboard" className="flex flex-col items-end">
+                        <span className="hover:text-[#FFD700] transition-colors font-bold">{t('dashboard')}</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter ${
+                          profile.role === 'super_admin' ? 'bg-red-500 text-white' :
+                          profile.role === 'admin' ? 'bg-purple-500 text-white' :
+                          profile.role === 'pandit' ? 'bg-orange-800 text-white' :
+                          'bg-blue-600 text-white'
+                        }`}>
+                          {profile.role.replace('_', ' ')}
+                        </span>
+                      </Link>
+                      <Link to="/profile" className="hover:text-[#FFD700] transition-colors flex items-center space-x-1">
+                        <UserIcon className="w-4 h-4" />
+                        <span>{t('profile')}</span>
+                      </Link>
+                      <button onClick={handleLogout} className="flex items-center space-x-1 bg-[#4A2C2A] px-4 py-2 rounded-lg hover:bg-[#2D1B1A] transition-colors">
+                        <LogOut className="w-4 h-4" />
+                        <span>{t('logout')}</span>
+                      </button>
+                    </div>
                   </>
                 ) : (
                   <Link to="/login" className="bg-white text-[#FF9933] px-6 py-2 rounded-lg font-bold hover:bg-[#FFD700] transition-colors">{t('login')}</Link>
@@ -193,6 +208,7 @@ function AppContent() {
                 <div className="px-4 pt-2 pb-6 space-y-2">
                   <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('home')}</Link>
                   <Link to="/panchang" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('panchang')}</Link>
+                  <Link to="/membership" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('membership')}</Link>
                   <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('gallery')}</Link>
                   <a 
                     href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
@@ -239,8 +255,10 @@ function AppContent() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={profile ? <Navigate to="/dashboard" /> : <LoginPage />} />
             <Route path="/panchang" element={<Panchang />} />
+            <Route path="/membership" element={profile ? <MembershipForm /> : <Navigate to="/login" />} />
             <Route path="/gallery" element={<EventGallery />} />
             <Route path="/booking" element={profile ? <PujaBooking /> : <Navigate to="/login" />} />
+            <Route path="/puja/:id" element={<PujaDetail />} />
             <Route path="/history" element={profile ? <BookingHistory /> : <Navigate to="/login" />} />
             <Route path="/profile" element={profile ? <ProfilePage /> : <Navigate to="/login" />} />
             

@@ -4,7 +4,7 @@ import { auth, db } from '../firebase';
 import { Puja, Booking } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
 import { Calendar, MapPin, CreditCard, Car, CheckCircle2, ArrowRight, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { toast } from 'sonner';
 import { sendNotification } from './NotificationBell';
 
@@ -24,24 +24,39 @@ export default function PujaBooking() {
   const [vehiclePrepayment, setVehiclePrepayment] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const fetchPujas = async () => {
       try {
         const querySnapshot = await getDocs(collection(db, 'pujas'));
         const pujasData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Puja));
-        if (pujasData.length > 0) {
-          setAvailablePujas(pujasData);
-        } else {
-          setAvailablePujas(DEFAULT_PUJAS);
+        let finalPujas = pujasData.length > 0 ? pujasData : DEFAULT_PUJAS;
+        setAvailablePujas(finalPujas);
+
+        // Check for pre-selected puja from state
+        const state = location.state as { selectedPujaId?: string };
+        if (state?.selectedPujaId) {
+          const preSelected = finalPujas.find(p => p.id === state.selectedPujaId);
+          if (preSelected) {
+            setSelectedPuja(preSelected);
+          }
         }
       } catch (error) {
         console.error(error);
         setAvailablePujas(DEFAULT_PUJAS);
+        
+        const state = location.state as { selectedPujaId?: string };
+        if (state?.selectedPujaId) {
+          const preSelected = DEFAULT_PUJAS.find(p => p.id === state.selectedPujaId);
+          if (preSelected) {
+            setSelectedPuja(preSelected);
+          }
+        }
       }
     };
     fetchPujas();
-  }, []);
+  }, [location.state]);
 
   const handleBooking = async () => {
     if (!auth.currentUser || !selectedPuja) return;
@@ -124,8 +139,20 @@ export default function PujaBooking() {
                     <h3 className="text-xl font-bold dark:text-white">{puja.name}</h3>
                     <span className="text-[#FF9933] font-bold">₹{puja.price}</span>
                   </div>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{puja.description}</p>
-                  <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-500 dark:text-gray-400">{puja.category}</span>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{puja.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-500 dark:text-gray-400">{puja.category}</span>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/puja/${puja.id}`);
+                      }}
+                      className="text-xs text-[#FF9933] font-bold hover:underline flex items-center space-x-1"
+                    >
+                      <span>विवरण देखें</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

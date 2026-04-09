@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, doc, updateDoc, getDocs, setDoc, getDoc, addDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
-import { Booking, UserProfile, PanditProfile, UserRole } from '../types';
+import { Booking, UserProfile, PanditProfile, UserRole, Membership } from '../types';
 import { motion, AnimatePresence } from 'motion/react';
-import { Users, BookOpen, CreditCard, CheckCircle, XCircle, UserCheck, Shield, Filter, X, Plus, Edit, Trash2, Car } from 'lucide-react';
+import { Users, BookOpen, CreditCard, CheckCircle, XCircle, UserCheck, Shield, Filter, X, Plus, Edit, Trash2, Car, Award, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 import { Puja } from '../types';
 import { sendNotification } from './NotificationBell';
@@ -14,7 +14,8 @@ export default function AdminDashboard() {
   const [pandits, setPandits] = useState<UserProfile[]>([]);
   const [panditProfiles, setPanditProfiles] = useState<Record<string, PanditProfile>>({});
   const [pujas, setPujas] = useState<Puja[]>([]);
-  const [activeTab, setActiveTab] = useState<'bookings' | 'users' | 'pandits' | 'pujas'>('bookings');
+  const [memberships, setMemberships] = useState<Membership[]>([]);
+  const [activeTab, setActiveTab] = useState<'bookings' | 'users' | 'pandits' | 'pujas' | 'memberships'>('bookings');
   const [loading, setLoading] = useState(true);
   const [editingPandit, setEditingPandit] = useState<UserProfile | null>(null);
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
@@ -64,11 +65,16 @@ export default function AdminDashboard() {
       setPujas(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Puja)));
     });
 
+    const unsubMemberships = onSnapshot(collection(db, 'memberships'), (snapshot) => {
+      setMemberships(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Membership)));
+    });
+
     return () => {
       unsubBookings();
       unsubUsers();
       unsubPanditProfiles();
       unsubPujas();
+      unsubMemberships();
     };
   }, []);
 
@@ -275,12 +281,35 @@ export default function AdminDashboard() {
           <h1 className="text-3xl font-bold text-[#4A2C2A] dark:text-orange-100">एडमिन डैशबोर्ड</h1>
           <p className="text-gray-500 dark:text-gray-400">प्रबंधन और नियंत्रण केंद्र</p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        {[
+          { label: 'लंबित बुकिंग', value: bookings.filter(b => b.status === 'pending').length, icon: <Calendar className="w-5 h-5" />, color: 'text-orange-500', bg: 'bg-orange-50' },
+          { label: 'लंबित सदस्यता', value: memberships.filter(m => m.status === 'pending').length, icon: <Award className="w-5 h-5" />, color: 'text-purple-500', bg: 'bg-purple-50' },
+          { label: 'लंबित पंडित', value: pandits.filter(p => p.status === 'pending').length, icon: <Users className="w-5 h-5" />, color: 'text-blue-500', bg: 'bg-blue-50' },
+          { label: 'कुल राजस्व', value: `₹${bookings.filter(b => b.status === 'confirmed').reduce((acc, b) => acc + (b.amount || 0), 0)}`, icon: <CreditCard className="w-5 h-5" />, color: 'text-green-500', bg: 'bg-green-50' },
+        ].map((stat, i) => (
+          <div key={i} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="flex items-center justify-between mb-2">
+              <div className={`${stat.bg} dark:bg-gray-700 p-2 rounded-lg ${stat.color}`}>
+                {stat.icon}
+              </div>
+              <span className="text-2xl font-bold dark:text-white">{stat.value}</span>
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 font-bold uppercase">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="flex bg-white dark:bg-gray-800 p-1 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
           {[
             { id: 'bookings', label: 'बुकिंग', icon: <BookOpen className="w-4 h-4" /> },
             { id: 'users', label: 'उपयोगकर्ता', icon: <Users className="w-4 h-4" /> },
             { id: 'pandits', label: 'पंडित', icon: <Shield className="w-4 h-4" /> },
             { id: 'pujas', label: 'पूजा प्रबंधन', icon: <Plus className="w-4 h-4" /> },
+            { id: 'memberships', label: 'सदस्यता', icon: <Award className="w-4 h-4" /> },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -512,6 +541,86 @@ export default function AdminDashboard() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {activeTab === 'memberships' && (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="bg-[#FFF5E6] dark:bg-gray-900 text-[#4A2C2A] dark:text-orange-100">
+                <tr>
+                  <th className="px-6 py-4 font-bold">नाम</th>
+                  <th className="px-6 py-4 font-bold">संपर्क</th>
+                  <th className="px-6 py-4 font-bold">प्रकार</th>
+                  <th className="px-6 py-4 font-bold">व्यवसाय</th>
+                  <th className="px-6 py-4 font-bold">स्थिति</th>
+                  <th className="px-6 py-4 font-bold">तिथि</th>
+                  <th className="px-6 py-4 font-bold">कार्य</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                {memberships.map((m) => (
+                  <tr key={m.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <div className="font-bold dark:text-white">{m.name}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{m.address.slice(0, 30)}...</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="text-sm dark:text-gray-300">{m.phone}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">{m.email}</div>
+                    </td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${
+                        m.membershipType === 'patron' ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400' :
+                        m.membershipType === 'life' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' :
+                        'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400'
+                      }`}>
+                        {m.membershipType}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm dark:text-gray-300">{m.occupation}</td>
+                    <td className="px-6 py-4">
+                      <span className={`px-2 py-1 rounded-full text-xs font-bold ${
+                        m.status === 'approved' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                        m.status === 'rejected' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
+                        'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'
+                      }`}>
+                        {m.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm dark:text-gray-400">{new Date(m.createdAt).toLocaleDateString('hi-IN')}</td>
+                    <td className="px-6 py-4">
+                      <div className="flex space-x-2">
+                        {m.status === 'pending' && (
+                          <>
+                            <button 
+                              onClick={async () => {
+                                await updateDoc(doc(db, 'memberships', m.id), { status: 'approved' });
+                                toast.success('सदस्यता स्वीकृत');
+                              }}
+                              className="p-1 text-green-600 hover:bg-green-50 rounded"
+                            >
+                              <CheckCircle className="w-5 h-5" />
+                            </button>
+                            <button 
+                              onClick={async () => {
+                                await updateDoc(doc(db, 'memberships', m.id), { status: 'rejected' });
+                                toast.error('सदस्यता अस्वीकृत');
+                              }}
+                              className="p-1 text-red-600 hover:bg-red-50 rounded"
+                            >
+                              <XCircle className="w-5 h-5" />
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

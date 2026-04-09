@@ -63,6 +63,11 @@ export const translations: Translations = {
   akhada_website: { hi: 'अखाड़ा वेबसाइट', en: 'Akhada Website', sa: 'अखाडा जालस्थानम्', gu: 'અખાડા વેબસાઇટ' },
   detailed_panchang: { hi: 'विस्तृत पंचांग', en: 'Detailed Panchang', sa: 'विस्तृतं पञ्चाङ्गम्', gu: 'વિગતવાર પંચાંગ' },
   whatsapp_us: { hi: 'व्हाट्सएप करें', en: 'WhatsApp Us', sa: 'व्हाट्सएप सन्देशः', gu: 'વોટ્સએપ કરો' },
+  membership: { hi: 'सदस्यता', en: 'Membership', sa: 'सदस्यता', gu: 'સભ્યપદ' },
+  seva_samiti: { hi: 'सेवा समिति', en: 'Seva Samiti', sa: 'सेवा समिति', gu: 'સેવા સમિતિ' },
+  membership_form: { hi: 'सदस्यता फार्म', en: 'Membership Form', sa: 'सदस्यता पत्रम्', gu: 'સભ્યપદ ફોર્મ' },
+  become_member: { hi: 'सदस्य बनें', en: 'Become a Member', sa: 'सदस्यः भवतु', gu: 'સભ્ય બનો' },
+  membership_desc: { hi: 'आश्रम सेवा संगठन का स्थायी सदस्य या दानदाता बनने के लिए आवेदन करें।', en: 'Apply to become a permanent member or donor of the Ashram Seva Organization.', sa: 'आश्रमसेवा-सङ्घस्य स्थायी सदस्यः दाता वा भवितुं आवेदनं कुर्वन्तु।', gu: 'આશ્રમ સેવા સંગઠનના કાયમી સભ્ય અથવા દાતા બનવા માટે અરજી કરો.' },
 };
 
 interface LanguageContextType {
