@@ -118,7 +118,7 @@ function AppContent() {
                 <div className="bg-white p-1 rounded-full">
                   <Sun className="w-8 h-8 text-[#FF9933]" />
                 </div>
-                <span className="text-2xl font-bold tracking-tight">रामर्चा</span>
+                <span className="text-2xl font-bold tracking-tight">Akhada (अखाड़ा)</span>
               </Link>
 
               {/* Desktop Menu */}
@@ -283,9 +283,15 @@ function AppContent() {
             <div className="flex justify-center mb-6">
               <Sun className="w-12 h-12" />
             </div>
-            <h2 className="text-2xl font-bold mb-4">रामर्चा</h2>
-            <p className="text-[#FFF5E6] opacity-80 mb-8 max-w-md mx-auto">
-              अखाड़ा परिषद द्वारा संचालित धार्मिक सेवाओं का डिजिटल मंच।
+            <h2 className="text-2xl font-bold mb-4">Akhada (अखाड़ा)</h2>
+            <p className="text-[#FFF5E6] opacity-80 mb-2 max-w-2xl mx-auto">
+              प्रायोजक:- अखिल भारतीय श्री पंच दिगम्बर अनी अखाड़ा व अखिल भारतीय श्री अखाड़ा परिषद
+            </p>
+            <p className="text-[#FFF5E6] opacity-80 mb-2 max-w-2xl mx-auto">
+              मुख्यालय - वृन्दावन धाम मथुरा
+            </p>
+            <p className="text-[#FFF5E6] opacity-80 mb-8 max-w-2xl mx-auto">
+              कार्यालय - रसूलपुर विदिशा मध्य प्रदेश भारत
             </p>
             <div className="flex justify-center space-x-6 mb-8">
               <Link to="/about" className="hover:underline">हमारे बारे में</Link>
@@ -295,7 +301,7 @@ function AppContent() {
                 <span>{t('whatsapp_us')}</span>
               </a>
             </div>
-            <p className="text-sm opacity-60">© 2026 रामर्चा - अखाड़ा परिषद। सर्वाधिकार सुरक्षित।</p>
+            <p className="text-sm opacity-60">© {new Date().getFullYear()} Akhada (अखाड़ा)। सर्वाधिकार सुरक्षित।</p>
           </div>
         </footer>
 

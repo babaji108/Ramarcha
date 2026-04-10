@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 export default function ChatAssistant() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<{ role: 'user' | 'model', text: string }[]>([
-    { role: 'model', text: 'नमस्ते! मैं रामर्चा का एआई सहायक हूँ। मैं आपकी कैसे मदद कर सकता हूँ?' }
+    { role: 'model', text: 'नमस्ते! मैं अखाड़ा का एआई सहायक हूँ। मैं आपकी कैसे मदद कर सकता हूँ?' }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +45,7 @@ export default function ChatAssistant() {
         contents: [
           {
             role: 'user',
-            parts: [{ text: "You are a helpful AI assistant for a Hindu temple and ashram named 'Ramarcha' in Vrindavan. You help devotees with booking pujas, answering questions about rituals, panchang, and ashram services. Reply in Hindi or English based on the user's language. Be polite, spiritual, and concise." }]
+            parts: [{ text: "You are a helpful AI assistant for a Hindu temple and ashram named 'Akhada' in Vrindavan. You help devotees with booking pujas, answering questions about rituals, panchang, and ashram services. Reply in Hindi or English based on the user's language. Be polite, spiritual, and concise." }]
           },
           ...chatHistory,
           {
@@ -70,9 +70,10 @@ export default function ChatAssistant() {
       {/* Floating Chat Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 bg-[#FF9933] text-white p-4 rounded-full shadow-2xl hover:bg-[#FF8811] transition-transform transform hover:scale-110 ${isOpen ? 'hidden' : 'block'}`}
+        className={`fixed bottom-6 left-6 z-50 bg-[#FF9933] text-white px-5 py-4 rounded-full shadow-2xl hover:bg-[#FF8811] transition-transform transform hover:scale-105 flex items-center space-x-2 ${isOpen ? 'hidden' : 'block'}`}
       >
-        <MessageCircle className="w-6 h-6" />
+        <Bot className="w-6 h-6" />
+        <span className="font-bold hidden sm:inline">एआई सहायक</span>
       </button>
 
       {/* Chat Window */}
@@ -82,13 +83,13 @@ export default function ChatAssistant() {
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}
-            className="fixed bottom-6 right-6 z-50 w-80 sm:w-96 h-[500px] max-h-[80vh] bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden"
+            className="fixed bottom-6 left-6 z-50 w-80 sm:w-96 h-[500px] max-h-[80vh] bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col border border-gray-200 dark:border-gray-700 overflow-hidden"
           >
             {/* Header */}
             <div className="bg-[#4A2C2A] text-white p-4 flex justify-between items-center">
               <div className="flex items-center space-x-2">
                 <Bot className="w-6 h-6 text-[#FF9933]" />
-                <span className="font-bold">रामर्चा एआई सहायक</span>
+                <span className="font-bold">अखाड़ा एआई सहायक</span>
               </div>
               <button 
                 onClick={() => setIsOpen(false)}

@@ -57,9 +57,8 @@ export default function ContactUs() {
                 <div>
                   <h4 className="font-bold dark:text-white mb-1">पता</h4>
                   <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    श्री रामर्चा मंदिर,<br />
-                    वृंदावन, उत्तर प्रदेश<br />
-                    भारत - 281121
+                    मुख्यालय - वृन्दावन धाम मथुरा<br />
+                    कार्यालय - रसूलपुर विदिशा मध्य प्रदेश भारत
                   </p>
                 </div>
               </div>
@@ -80,7 +79,7 @@ export default function ContactUs() {
                 </div>
                 <div>
                   <h4 className="font-bold dark:text-white mb-1">ईमेल</h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">info@ramarcha.com</p>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">info@akhada.com</p>
                 </div>
               </div>
             </div>

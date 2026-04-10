@@ -19,7 +19,7 @@ export const translations: Translations = {
   profile: { hi: 'प्रोफ़ाइल', en: 'Profile', sa: 'विवरणम्', gu: 'પ્રોફાઇલ' },
   logout: { hi: 'लॉगआउट', en: 'Logout', sa: 'निर्गमनम्', gu: 'લૉગઆઉટ' },
   login: { hi: 'लॉगिन', en: 'Login', sa: 'प्रवेशः', gu: 'લોગિન' },
-  welcome: { hi: 'रामर्चा में आपका स्वागत है', en: 'Welcome to Ramarcha', sa: 'रामर्चायां स्वागतम्', gu: 'રામર્ચામાં આપનું સ્વાગત છે' },
+  welcome: { hi: 'अखाड़ा में आपका स्वागत है', en: 'Welcome to Akhada', sa: 'अखाडायां स्वागतम्', gu: 'અખાડામાં આપનું સ્વાગત છે' },
   hero_desc: { hi: 'अखाड़ा परिषद द्वारा संचालित धार्मिक सेवाओं का विश्वसनीय मंच', en: 'Trusted platform for religious services managed by Akhada Parishad', sa: 'अखाडा परिषदा संचालितं धार्मिकसेवानां विश्वसनीयं मञ्चम्', gu: 'અખાડા પરિષદ દ્વારા સંચાલિત ધાર્મિક સેવાઓનું વિશ્વસનીય મંચ' },
   book_puja: { hi: 'पूजा बुक करें', en: 'Book Puja', sa: 'पूजां आरक्षयतु', gu: 'પૂજા બુક કરો' },
   our_services: { hi: 'हमारी सेवाएँ', en: 'Our Services', sa: 'अस्माकं सेवाः', gu: 'અમારી સેવાઓ' },

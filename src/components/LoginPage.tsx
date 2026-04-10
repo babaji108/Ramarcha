@@ -91,7 +91,7 @@ export default function LoginPage() {
             <ShieldCheck className="w-10 h-10" />
           </div>
           <h2 className="text-3xl font-bold text-[#4A2C2A] dark:text-orange-100">लॉगिन करें</h2>
-          <p className="text-gray-500 dark:text-gray-400 mt-2">रामर्चा परिवार में आपका स्वागत है</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-2">अखाड़ा परिवार में आपका स्वागत है</p>
         </div>
 
         {step === 'phone' ? (
