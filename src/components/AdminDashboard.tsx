@@ -283,12 +283,12 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         {[
           { label: 'लंबित बुकिंग', value: bookings.filter(b => b.status === 'pending').length, icon: <Calendar className="w-5 h-5" />, color: 'text-orange-500', bg: 'bg-orange-50' },
           { label: 'लंबित सदस्यता', value: memberships.filter(m => m.status === 'pending').length, icon: <Award className="w-5 h-5" />, color: 'text-purple-500', bg: 'bg-purple-50' },
-          { label: 'लंबित पंडित', value: pandits.filter(p => p.status === 'pending').length, icon: <Users className="w-5 h-5" />, color: 'text-blue-500', bg: 'bg-blue-50' },
-          { label: 'कुल राजस्व', value: `₹${bookings.filter(b => b.status === 'confirmed').reduce((acc, b) => acc + (b.amount || 0), 0)}`, icon: <CreditCard className="w-5 h-5" />, color: 'text-green-500', bg: 'bg-green-50' },
+          { label: 'कुल पंडित', value: pandits.length, icon: <Users className="w-5 h-5" />, color: 'text-blue-500', bg: 'bg-blue-50' },
+          { label: 'कन्फर्म बुकिंग', value: bookings.filter(b => b.status === 'confirmed').length, icon: <CreditCard className="w-5 h-5" />, color: 'text-green-500', bg: 'bg-green-50' },
         ].map((stat, i) => (
           <div key={i} className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
             <div className="flex items-center justify-between mb-2">

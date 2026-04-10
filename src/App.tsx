@@ -42,6 +42,8 @@ import Panchang from './components/Panchang';
 import ProfilePage from './components/ProfilePage';
 import NotificationBell from './components/NotificationBell';
 import BookingHistory from './components/BookingHistory';
+import ContactUs from './components/ContactUs';
+import ChatAssistant from './components/ChatAssistant';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -125,8 +127,9 @@ function AppContent() {
                 <Link to="/panchang" className="hover:text-[#FFD700] transition-colors">{t('panchang')}</Link>
                 <Link to="/membership" className="hover:text-[#FFD700] transition-colors">{t('membership')}</Link>
                 <Link to="/gallery" className="hover:text-[#FFD700] transition-colors">{t('gallery')}</Link>
+                <Link to="/contact" className="hover:text-[#FFD700] transition-colors">{t('contact')}</Link>
                 <a 
-                  href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+                  href="https://sites.google.com/view/parisad/home?authuser=0" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="flex items-center space-x-1 hover:text-[#FFD700] transition-colors"
@@ -210,8 +213,9 @@ function AppContent() {
                   <Link to="/panchang" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('panchang')}</Link>
                   <Link to="/membership" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('membership')}</Link>
                   <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('gallery')}</Link>
+                  <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('contact')}</Link>
                   <a 
-                    href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+                    href="https://sites.google.com/view/parisad/home?authuser=0" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     onClick={() => setIsMenuOpen(false)}
@@ -257,6 +261,7 @@ function AppContent() {
             <Route path="/panchang" element={<Panchang />} />
             <Route path="/membership" element={profile ? <MembershipForm /> : <Navigate to="/login" />} />
             <Route path="/gallery" element={<EventGallery />} />
+            <Route path="/contact" element={<ContactUs />} />
             <Route path="/booking" element={profile ? <PujaBooking /> : <Navigate to="/login" />} />
             <Route path="/puja/:id" element={<PujaDetail />} />
             <Route path="/history" element={profile ? <BookingHistory /> : <Navigate to="/login" />} />
@@ -301,10 +306,12 @@ function AppContent() {
           rel="noopener noreferrer"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="fixed bottom-24 right-8 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-2xl flex items-center justify-center"
+          className="fixed bottom-24 right-6 z-[60] bg-[#25D366] text-white p-4 rounded-full shadow-2xl flex items-center justify-center"
         >
           <MessageCircle className="w-6 h-6 fill-current" />
         </motion.a>
+
+        <ChatAssistant />
       </div>
     </Router>
   );

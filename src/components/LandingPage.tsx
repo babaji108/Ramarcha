@@ -87,7 +87,7 @@ export default function LandingPage() {
               <span>{t('become_member')}</span>
             </Link>
             <a 
-              href="https://tirthdarsan.blogspot.com/2025/07/blog-post.html?m=1" 
+              href="https://sites.google.com/view/parisad/home?authuser=0" 
               target="_blank" 
               rel="noopener noreferrer"
               className="bg-white/10 backdrop-blur-md text-white border border-white/30 px-12 py-5 rounded-full text-xl font-bold hover:bg-white/20 transition-all flex items-center space-x-2"

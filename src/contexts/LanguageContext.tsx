@@ -68,6 +68,7 @@ export const translations: Translations = {
   membership_form: { hi: 'सदस्यता फार्म', en: 'Membership Form', sa: 'सदस्यता पत्रम्', gu: 'સભ્યપદ ફોર્મ' },
   become_member: { hi: 'सदस्य बनें', en: 'Become a Member', sa: 'सदस्यः भवतु', gu: 'સભ્ય બનો' },
   membership_desc: { hi: 'आश्रम सेवा संगठन का स्थायी सदस्य या दानदाता बनने के लिए आवेदन करें।', en: 'Apply to become a permanent member or donor of the Ashram Seva Organization.', sa: 'आश्रमसेवा-सङ्घस्य स्थायी सदस्यः दाता वा भवितुं आवेदनं कुर्वन्तु।', gu: 'આશ્રમ સેવા સંગઠનના કાયમી સભ્ય અથવા દાતા બનવા માટે અરજી કરો.' },
+  contact: { hi: 'संपर्क', en: 'Contact', sa: 'सम्पर्कः', gu: 'સંપર્ક' },
 };
 
 interface LanguageContextType {
