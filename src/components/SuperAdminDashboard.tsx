@@ -142,13 +142,26 @@ export default function SuperAdminDashboard() {
             <p className="text-xs text-red-600 dark:text-red-500">आपके पास पूर्ण नियंत्रण है। कृपया सावधानी बरतें।</p>
           </div>
         </div>
-        <button 
-          onClick={() => setShowConfig(!showConfig)}
-          className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors flex items-center space-x-2"
-        >
-          <Settings className="w-4 h-4" />
-          <span>सिस्टम सेटिंग्स</span>
-        </button>
+        <div className="flex items-center space-x-4">
+          <button 
+            onClick={() => setShowAuditLogs(!showAuditLogs)}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition-colors flex items-center space-x-2 ${
+              showAuditLogs 
+                ? 'bg-[#FF9933] text-white hover:bg-[#FF8811]' 
+                : 'bg-white text-red-600 border border-red-200 hover:bg-red-50'
+            }`}
+          >
+            <Database className="w-4 h-4" />
+            <span>{showAuditLogs ? 'ऑडिट लॉग छिपाएं' : 'ऑडिट लॉग देखें'}</span>
+          </button>
+          <button 
+            onClick={() => setShowConfig(!showConfig)}
+            className="bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-600 transition-colors flex items-center space-x-2"
+          >
+            <Settings className="w-4 h-4" />
+            <span>सिस्टम सेटिंग्स</span>
+          </button>
+        </div>
       </div>
 
       {showConfig && (
@@ -204,64 +217,6 @@ export default function SuperAdminDashboard() {
               </button>
             </div>
           </motion.div>
-
-          {/* Audit Logs Section */}
-          <AnimatePresence>
-            {showAuditLogs && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
-              >
-                <div className="p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex justify-between items-center">
-                  <h3 className="font-bold dark:text-white">भूमिका परिवर्तन ऑडिट लॉग</h3>
-                  <span className="text-xs text-gray-500">{auditLogs.length} रिकॉर्ड्स</span>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead className="bg-gray-50 dark:bg-gray-900 text-xs uppercase text-gray-500 font-bold">
-                      <tr>
-                        <th className="px-6 py-3">समय</th>
-                        <th className="px-6 py-3">एडमिन</th>
-                        <th className="px-6 py-3">उपयोगकर्ता</th>
-                        <th className="px-6 py-3">परिवर्तन</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                      {auditLogs.map((log) => (
-                        <tr key={log.id} className="text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
-                          <td className="px-6 py-4 dark:text-gray-300">
-                            {format(new Date(log.timestamp), 'dd MMM, HH:mm', { locale: hi })}
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="font-bold dark:text-white">{log.adminName}</div>
-                            <div className="text-[10px] text-gray-400">{log.adminId.slice(0, 8)}...</div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="font-bold dark:text-white">{log.targetUserName}</div>
-                            <div className="text-[10px] text-gray-400">{log.targetUserId.slice(0, 8)}...</div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center space-x-2">
-                              <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] uppercase">{log.oldRole}</span>
-                              <ChevronRight className="w-3 h-3 text-gray-400" />
-                              <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-[10px] uppercase font-bold">{log.newRole}</span>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
-                      {auditLogs.length === 0 && (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-12 text-center text-gray-500">कोई ऑडिट लॉग उपलब्ध नहीं है</td>
-                        </tr>
-                      )}
-                    </tbody>
-                  </table>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
 
           {/* Banner List */}
           <motion.div 
@@ -328,7 +283,65 @@ export default function SuperAdminDashboard() {
       )}
 
       <div className="border-t border-gray-200 dark:border-gray-700 pt-12">
-        <AdminDashboard />
+        {/* Audit Logs Section (Outside of showConfig) */}
+      <AnimatePresence>
+        {showAuditLogs && (
+          <motion.div 
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden"
+          >
+            <div className="p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex justify-between items-center">
+              <h3 className="font-bold dark:text-white">भूमिका परिवर्तन ऑडिट लॉग</h3>
+              <span className="text-xs text-gray-500">{auditLogs.length} रिकॉर्ड्स</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead className="bg-gray-50 dark:bg-gray-900 text-xs uppercase text-gray-500 font-bold">
+                  <tr>
+                    <th className="px-6 py-3">समय</th>
+                    <th className="px-6 py-3">एडमिन</th>
+                    <th className="px-6 py-3">उपयोगकर्ता</th>
+                    <th className="px-6 py-3">परिवर्तन</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+                  {auditLogs.map((log) => (
+                    <tr key={log.id} className="text-sm hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                      <td className="px-6 py-4 dark:text-gray-300">
+                        {format(new Date(log.timestamp), 'dd MMM, HH:mm', { locale: hi })}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-bold dark:text-white">{log.adminName}</div>
+                        <div className="text-[10px] text-gray-400">{log.adminId.slice(0, 8)}...</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="font-bold dark:text-white">{log.targetUserName}</div>
+                        <div className="text-[10px] text-gray-400">{log.targetUserId.slice(0, 8)}...</div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-700 rounded text-[10px] uppercase">{log.oldRole}</span>
+                          <ChevronRight className="w-3 h-3 text-gray-400" />
+                          <span className="px-2 py-0.5 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 rounded text-[10px] uppercase font-bold">{log.newRole}</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                  {auditLogs.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="px-6 py-12 text-center text-gray-500">कोई ऑडिट लॉग उपलब्ध नहीं है</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AdminDashboard />
       </div>
 
       {/* Broadcast Modal */}
