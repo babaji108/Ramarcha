@@ -85,7 +85,7 @@ export default function PujaBooking() {
       );
 
       toast.success('पूजा सफलतापूर्वक बुक की गई!');
-      setStep(4); // Success step
+      setStep(5); // Success step
     } catch (error) {
       console.error(error);
       toast.error('बुकिंग विफल रही');
@@ -99,7 +99,7 @@ export default function PujaBooking() {
       {/* Progress Bar */}
       <div className="mb-12">
         <div className="flex justify-between mb-2">
-          {['पूजा चुनें', 'विवरण भरें', 'भुगतान', 'सफल'].map((s, i) => (
+          {['पूजा चुनें', 'विवरण भरें', 'पुष्टि करें', 'भुगतान', 'सफल'].map((s, i) => (
             <span key={i} className={`text-sm font-bold ${step > i ? 'text-[#FF9933]' : 'text-gray-400 dark:text-gray-500'}`}>
               {s}
             </span>
@@ -108,7 +108,7 @@ export default function PujaBooking() {
         <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
           <motion.div 
             initial={{ width: 0 }}
-            animate={{ width: `${(step / 4) * 100}%` }}
+            animate={{ width: `${(step / 5) * 100}%` }}
             className="h-full bg-[#FF9933]"
           />
         </div>
@@ -234,7 +234,7 @@ export default function PujaBooking() {
                 onClick={() => setStep(3)}
                 className="bg-[#FF9933] text-white px-8 py-4 rounded-xl font-bold flex items-center space-x-2 disabled:opacity-50 shadow-lg"
               >
-                <span>भुगतान पर जाएँ</span>
+                <span>पुष्टि करें</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -244,6 +244,55 @@ export default function PujaBooking() {
         {step === 3 && (
           <motion.div 
             key="step3"
+            initial={{ x: 20, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -20, opacity: 0 }}
+            className="space-y-8 bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700"
+          >
+            <h2 className="text-3xl font-bold text-[#4A2C2A] dark:text-orange-100">बुकिंग की पुष्टि करें</h2>
+            
+            <div className="space-y-6 bg-[#FFF5E6] dark:bg-gray-900 p-6 rounded-2xl">
+              <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                <span className="text-gray-500 dark:text-gray-400">पूजा का नाम</span>
+                <span className="font-bold dark:text-white text-lg">{selectedPuja?.name}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                <span className="text-gray-500 dark:text-gray-400">तिथि और समय</span>
+                <span className="font-bold dark:text-white">{date ? new Date(date).toLocaleString('hi-IN', { dateStyle: 'long', timeStyle: 'short' }) : ''}</span>
+              </div>
+              <div className="flex flex-col border-b border-gray-200 dark:border-gray-700 pb-4">
+                <span className="text-gray-500 dark:text-gray-400 mb-2">पूजा का स्थान</span>
+                <span className="font-bold dark:text-white">{address}</span>
+              </div>
+              <div className="flex justify-between items-center border-b border-gray-200 dark:border-gray-700 pb-4">
+                <span className="text-gray-500 dark:text-gray-400">वाहन सेवा</span>
+                <span className="font-bold dark:text-white">{vehiclePrepayment ? 'हाँ (अग्रिम बुकिंग)' : 'नहीं'}</span>
+              </div>
+              <div className="flex justify-between items-center pt-2">
+                <span className="text-gray-500 dark:text-gray-400">कुल राशि</span>
+                <span className="font-bold text-2xl text-[#FF9933]">₹{selectedPuja?.price}</span>
+              </div>
+            </div>
+
+            <div className="flex justify-between mt-10">
+              <button onClick={() => setStep(2)} className="flex items-center space-x-2 text-gray-500 dark:text-gray-400 font-bold hover:text-[#FF9933] transition-colors">
+                <ArrowLeft className="w-5 h-5" />
+                <span>संपादित करें</span>
+              </button>
+              <button 
+                onClick={() => setStep(4)}
+                className="bg-[#FF9933] text-white px-8 py-4 rounded-xl font-bold flex items-center space-x-2 shadow-lg hover:bg-[#FF8811] transition-colors"
+              >
+                <span>भुगतान पर जाएँ</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+
+        {step === 4 && (
+          <motion.div 
+            key="step4"
             initial={{ x: 20, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -20, opacity: 0 }}
@@ -272,13 +321,13 @@ export default function PujaBooking() {
                 <span>{loading ? 'प्रक्रिया जारी है...' : 'अभी भुगतान करें'}</span>
               </button>
             </div>
-            <button onClick={() => setStep(2)} className="text-gray-500 dark:text-gray-400 font-bold hover:text-[#FF9933] transition-colors">पीछे जाएँ</button>
+            <button onClick={() => setStep(3)} className="text-gray-500 dark:text-gray-400 font-bold hover:text-[#FF9933] transition-colors">पीछे जाएँ</button>
           </motion.div>
         )}
 
-        {step === 4 && (
+        {step === 5 && (
           <motion.div 
-            key="step4"
+            key="step5"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             className="text-center space-y-6 py-12"
