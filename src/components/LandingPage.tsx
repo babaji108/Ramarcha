@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle, Globe, Award } from 'lucide-react';
+import { Calendar, Users, CreditCard, Video, MapPin, ArrowRight, Sun, BookOpen, Star, Quote, Mail, CheckCircle, Globe, Award, Bot } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import DonationSection from './DonationSection';
 import FloatingDonationButton from './FloatingDonationButton';
@@ -48,10 +48,18 @@ export default function LandingPage() {
           <motion.h1 
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            className="text-6xl md:text-8xl font-bold mb-6 tracking-tight"
+            className="text-6xl md:text-8xl font-bold mb-2 tracking-tight"
           >
-            {t('welcome')}
+            Digambar
           </motion.h1>
+          <motion.h2
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="text-3xl md:text-5xl font-semibold mb-6 tracking-tight text-[#FFD700]"
+          >
+            Sri Purnanand Ganesh ji
+          </motion.h2>
           <motion.p 
             initial={{ y: 30, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -66,6 +74,13 @@ export default function LandingPage() {
             transition={{ delay: 0.4 }}
             className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           >
+            <Link 
+              to="/mitra-ai" 
+              className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white px-12 py-5 rounded-full text-xl font-bold hover:shadow-lg transition-all transform hover:scale-105 shadow-2xl flex items-center space-x-3 mb-4 sm:mb-0"
+            >
+              <Bot className="w-6 h-6" />
+              <span>मित्र AI से पूछें</span>
+            </Link>
             <Link 
               to="/booking" 
               className="bg-[#FF9933] text-white px-12 py-5 rounded-full text-xl font-bold hover:bg-[#FF8811] transition-all transform hover:scale-105 shadow-2xl flex items-center space-x-3"

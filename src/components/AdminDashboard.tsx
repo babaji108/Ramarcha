@@ -15,7 +15,7 @@ export default function AdminDashboard() {
   const [panditProfiles, setPanditProfiles] = useState<Record<string, PanditProfile>>({});
   const [pujas, setPujas] = useState<Puja[]>([]);
   const [memberships, setMemberships] = useState<Membership[]>([]);
-  const [activeTab, setActiveTab] = useState<'bookings' | 'users' | 'pandits' | 'pujas' | 'memberships'>('bookings');
+  const [activeTab, setActiveTab] = useState<'bookings' | 'users' | 'pandits' | 'pujas' | 'memberships' | 'mitra_ai'>('bookings');
   const [loading, setLoading] = useState(true);
   const [editingPandit, setEditingPandit] = useState<UserProfile | null>(null);
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
@@ -310,6 +310,7 @@ export default function AdminDashboard() {
             { id: 'pandits', label: 'पंडित', icon: <Shield className="w-4 h-4" /> },
             { id: 'pujas', label: 'पूजा प्रबंधन', icon: <Plus className="w-4 h-4" /> },
             { id: 'memberships', label: 'सदस्यता', icon: <Award className="w-4 h-4" /> },
+            { id: 'mitra_ai', label: 'मित्र AI सेटिंग्स', icon: <BookOpen className="w-4 h-4" /> },
           ].map((tab) => (
             <button
               key={tab.id}
@@ -707,6 +708,79 @@ export default function AdminDashboard() {
           </div>
         )}
       </AnimatePresence>
+
+      {activeTab === 'mitra_ai' && (
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-8">
+          <div className="flex items-center space-x-3 mb-6">
+            <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-xl">
+              <BookOpen className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold dark:text-white">मित्र AI सेटिंग्स (कमाई और विज्ञापन)</h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">एफिलिएट और एडसेंस सेटिंग्स प्रबंधित करें</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Affiliate Settings */}
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg dark:text-white border-b pb-2">Amazon Affiliate Setup</h3>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Affiliate Tag ID</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g., akhada_affiliate_01"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                  defaultValue="akhada_affiliate_01"
+                />
+                <p className="text-xs text-gray-500 mt-1">यह टैग मित्र AI द्वारा सुझाए गए सभी Amazon लिंक्स में अपने आप जुड़ जाएगा।</p>
+              </div>
+            </div>
+
+            {/* AdSense Settings */}
+            <div className="space-y-4">
+              <h3 className="font-bold text-lg dark:text-white border-b pb-2">Google AdSense Setup</h3>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Publisher ID</label>
+                <input 
+                  type="text" 
+                  placeholder="e.g., pub-1234567890"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                />
+              </div>
+              <div className="flex items-center space-x-2">
+                <input type="checkbox" id="enableAds" className="w-4 h-4 text-indigo-600 rounded" defaultChecked />
+                <label htmlFor="enableAds" className="text-sm text-gray-700 dark:text-gray-300">मित्र AI पेज पर विज्ञापन दिखाएं</label>
+              </div>
+            </div>
+
+            {/* Bank Details */}
+            <div className="space-y-4 md:col-span-2 mt-4">
+              <h3 className="font-bold text-lg dark:text-white border-b pb-2">Bank & Payout Details</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Holder Name</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Number</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IFSC Code</label>
+                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-8 flex justify-end">
+            <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-colors shadow-md">
+              सेटिंग्स सहेजें
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Role Management Modal */}
       <AnimatePresence>

@@ -22,7 +22,8 @@ import {
   Sun,
   Moon,
   Globe,
-  MessageCircle
+  MessageCircle,
+  Bot
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Toaster, toast } from 'sonner';
@@ -43,7 +44,7 @@ import ProfilePage from './components/ProfilePage';
 import NotificationBell from './components/NotificationBell';
 import BookingHistory from './components/BookingHistory';
 import ContactUs from './components/ContactUs';
-import ChatAssistant from './components/ChatAssistant';
+import MitraAI from './components/MitraAI';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -125,6 +126,10 @@ function AppContent() {
               <div className="hidden md:flex items-center space-x-8">
                 <Link to="/" className="hover:text-[#FFD700] transition-colors">{t('home')}</Link>
                 <Link to="/panchang" className="hover:text-[#FFD700] transition-colors">{t('panchang')}</Link>
+                <Link to="/mitra-ai" className="flex items-center space-x-1 hover:text-[#FFD700] transition-colors font-bold text-[#FFD700]">
+                  <Bot className="w-4 h-4" />
+                  <span>मित्र AI</span>
+                </Link>
                 <Link to="/membership" className="hover:text-[#FFD700] transition-colors">{t('membership')}</Link>
                 <Link to="/gallery" className="hover:text-[#FFD700] transition-colors">{t('gallery')}</Link>
                 <Link to="/contact" className="hover:text-[#FFD700] transition-colors">{t('contact')}</Link>
@@ -211,6 +216,10 @@ function AppContent() {
                 <div className="px-4 pt-2 pb-6 space-y-2">
                   <Link to="/" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('home')}</Link>
                   <Link to="/panchang" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('panchang')}</Link>
+                  <Link to="/mitra-ai" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2 font-bold text-[#FFD700] flex items-center space-x-2">
+                    <Bot className="w-4 h-4" />
+                    <span>मित्र AI</span>
+                  </Link>
                   <Link to="/membership" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('membership')}</Link>
                   <Link to="/gallery" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('gallery')}</Link>
                   <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block py-2 hover:bg-[#FF9933] rounded px-2">{t('contact')}</Link>
@@ -262,6 +271,7 @@ function AppContent() {
             <Route path="/membership" element={profile ? <MembershipForm /> : <Navigate to="/login" />} />
             <Route path="/gallery" element={<EventGallery />} />
             <Route path="/contact" element={<ContactUs />} />
+            <Route path="/mitra-ai" element={<MitraAI />} />
             <Route path="/booking" element={profile ? <PujaBooking /> : <Navigate to="/login" />} />
             <Route path="/puja/:id" element={<PujaDetail />} />
             <Route path="/history" element={profile ? <BookingHistory /> : <Navigate to="/login" />} />
@@ -316,8 +326,6 @@ function AppContent() {
         >
           <MessageCircle className="w-6 h-6 fill-current" />
         </motion.a>
-
-        <ChatAssistant />
       </div>
     </Router>
   );
