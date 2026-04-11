@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate, useLocation } from 'react-router-dom';
 import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { auth, db } from './firebase';
@@ -23,7 +23,8 @@ import {
   Moon,
   Globe,
   MessageCircle,
-  Bot
+  Bot,
+  Shield
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Toaster, toast } from 'sonner';
@@ -45,6 +46,7 @@ import NotificationBell from './components/NotificationBell';
 import BookingHistory from './components/BookingHistory';
 import ContactUs from './components/ContactUs';
 import MitraAI from './components/MitraAI';
+import PublishedSite from './components/PublishedSite';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -53,6 +55,7 @@ function AppContent() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
   const [isDarkMode, setIsDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark';
@@ -106,13 +109,24 @@ function AppContent() {
     );
   }
 
+  const isPublishedSiteRoute = location.pathname.startsWith('/site/');
+  const isMitraAIRoute = location.pathname === '/mitra-ai';
+
+  if (isPublishedSiteRoute || isMitraAIRoute) {
+    return (
+      <Routes>
+        <Route path="/site/:id" element={<PublishedSite />} />
+        <Route path="/mitra-ai" element={<MitraAI />} />
+      </Routes>
+    );
+  }
+
   return (
-    <Router>
-      <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-[#FFF5E6] text-[#4A2C2A]'} font-sans`}>
-        <Toaster position="top-center" richColors />
-        
-        {/* Navigation */}
-        <nav className="bg-[#FF9933] text-white shadow-lg sticky top-0 z-50">
+    <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900 text-gray-100' : 'bg-[#FFF5E6] text-[#4A2C2A]'} font-sans`}>
+      <Toaster position="top-center" richColors />
+      
+      {/* Navigation */}
+      <nav className="bg-[#FF9933] text-white shadow-lg sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between h-16 items-center">
               <Link to="/" className="flex items-center space-x-2">
@@ -169,6 +183,12 @@ function AppContent() {
                 {profile ? (
                   <>
                     <div className="flex items-center space-x-4">
+                      {(profile.role === 'admin' || profile.role === 'super_admin') && (
+                        <Link to="/dashboard" className="hover:text-[#FFD700] transition-colors font-bold flex items-center space-x-1">
+                          <Shield className="w-4 h-4" />
+                          <span>एडमिन पैनल</span>
+                        </Link>
+                      )}
                       <Link to="/dashboard" className="flex flex-col items-end">
                         <span className="hover:text-[#FFD700] transition-colors font-bold">{t('dashboard')}</span>
                         <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter ${
@@ -272,6 +292,7 @@ function AppContent() {
             <Route path="/gallery" element={<EventGallery />} />
             <Route path="/contact" element={<ContactUs />} />
             <Route path="/mitra-ai" element={<MitraAI />} />
+            <Route path="/site/:id" element={<PublishedSite />} />
             <Route path="/booking" element={profile ? <PujaBooking /> : <Navigate to="/login" />} />
             <Route path="/puja/:id" element={<PujaDetail />} />
             <Route path="/history" element={profile ? <BookingHistory /> : <Navigate to="/login" />} />
@@ -327,14 +348,15 @@ function AppContent() {
           <MessageCircle className="w-6 h-6 fill-current" />
         </motion.a>
       </div>
-    </Router>
   );
 }
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
+    <Router>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </Router>
   );
 }

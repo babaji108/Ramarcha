@@ -57,16 +57,22 @@ export default function LoginPage() {
       const docRef = doc(db, 'users', user.uid);
       const docSnap = await getDoc(docRef);
       
+      const isSuperAdmin = user.email === 'sriswamiji108@gmail.com';
+      const defaultRole = isSuperAdmin ? 'super_admin' : 'bhakt';
+      
       if (!docSnap.exists()) {
-        // New user - default to bhakt
+        // New user
         await setDoc(docRef, {
           uid: user.uid,
           name: user.displayName || 'अनाम भक्त',
           email: user.email,
-          role: 'bhakt',
+          role: defaultRole,
           emailVerified: user.emailVerified,
           createdAt: new Date().toISOString()
         });
+      } else if (isSuperAdmin && docSnap.data().role !== 'super_admin') {
+        // Force update to super_admin if they were already created as something else
+        await setDoc(docRef, { role: 'super_admin' }, { merge: true });
       }
       
       toast.success('लॉगिन सफल!');

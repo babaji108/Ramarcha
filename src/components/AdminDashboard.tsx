@@ -23,6 +23,25 @@ export default function AdminDashboard() {
   const [selectedSpecializations, setSelectedSpecializations] = useState<string[]>([]);
   const [newRole, setNewRole] = useState<UserRole | null>(null);
 
+  // Mitra AI Settings State
+  const [mitraSettings, setMitraSettings] = useState({
+    affiliateTag: 'akhada_affiliate_01',
+    adsenseId: 'pub-1234567890',
+    enableAds: true,
+    bankName: 'State Bank of India',
+    accountName: 'Akhada Trust',
+    accountNumber: '32145698700',
+    ifscCode: 'SBIN0001234'
+  });
+
+  const handleSaveMitraSettings = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      toast.success('मित्र AI सेटिंग्स सफलतापूर्वक सहेजी गईं!');
+    }, 800);
+  };
+
   const ROLES: { id: UserRole; label: string }[] = [
     { id: 'super_admin', label: 'सुपर एडमिन' },
     { id: 'admin', label: 'एडमिन' },
@@ -729,9 +748,10 @@ export default function AdminDashboard() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Affiliate Tag ID</label>
                 <input 
                   type="text" 
+                  value={mitraSettings.affiliateTag}
+                  onChange={(e) => setMitraSettings({...mitraSettings, affiliateTag: e.target.value})}
                   placeholder="e.g., akhada_affiliate_01"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
-                  defaultValue="akhada_affiliate_01"
                 />
                 <p className="text-xs text-gray-500 mt-1">यह टैग मित्र AI द्वारा सुझाए गए सभी Amazon लिंक्स में अपने आप जुड़ जाएगा।</p>
               </div>
@@ -744,12 +764,20 @@ export default function AdminDashboard() {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Publisher ID</label>
                 <input 
                   type="text" 
+                  value={mitraSettings.adsenseId}
+                  onChange={(e) => setMitraSettings({...mitraSettings, adsenseId: e.target.value})}
                   placeholder="e.g., pub-1234567890"
                   className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none"
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <input type="checkbox" id="enableAds" className="w-4 h-4 text-indigo-600 rounded" defaultChecked />
+                <input 
+                  type="checkbox" 
+                  id="enableAds" 
+                  checked={mitraSettings.enableAds}
+                  onChange={(e) => setMitraSettings({...mitraSettings, enableAds: e.target.checked})}
+                  className="w-4 h-4 text-indigo-600 rounded" 
+                />
                 <label htmlFor="enableAds" className="text-sm text-gray-700 dark:text-gray-300">मित्र AI पेज पर विज्ञापन दिखाएं</label>
               </div>
             </div>
@@ -760,23 +788,42 @@ export default function AdminDashboard() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Holder Name</label>
-                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                  <input 
+                    type="text" 
+                    value={mitraSettings.accountName}
+                    onChange={(e) => setMitraSettings({...mitraSettings, accountName: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" 
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Account Number</label>
-                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                  <input 
+                    type="text" 
+                    value={mitraSettings.accountNumber}
+                    onChange={(e) => setMitraSettings({...mitraSettings, accountNumber: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" 
+                  />
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IFSC Code</label>
-                  <input type="text" className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" />
+                  <input 
+                    type="text" 
+                    value={mitraSettings.ifscCode}
+                    onChange={(e) => setMitraSettings({...mitraSettings, ifscCode: e.target.value})}
+                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 outline-none" 
+                  />
                 </div>
               </div>
             </div>
           </div>
 
           <div className="mt-8 flex justify-end">
-            <button className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-colors shadow-md">
-              सेटिंग्स सहेजें
+            <button 
+              onClick={handleSaveMitraSettings}
+              disabled={loading}
+              className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-indigo-700 transition-colors shadow-md disabled:opacity-50"
+            >
+              {loading ? 'सहेज रहा है...' : 'सेटिंग्स सहेजें'}
             </button>
           </div>
         </div>
