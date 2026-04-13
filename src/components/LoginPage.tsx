@@ -77,9 +77,9 @@ export default function LoginPage() {
       
       toast.success('लॉगिन सफल!');
       navigate('/dashboard');
-    } catch (error) {
-      console.error(error);
-      toast.error('Google लॉगिन विफल');
+    } catch (error: any) {
+      console.error("Login Error Details:", error);
+      toast.error(`लॉगिन विफल: ${error.message || 'अज्ञात त्रुटि'}`);
     } finally {
       setLoading(false);
     }
